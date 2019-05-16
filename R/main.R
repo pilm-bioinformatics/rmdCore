@@ -15,7 +15,13 @@
 
 #' @import git2r
 download_repo <- function(repo, local = ".", url = "https://github.com/"){
-    parse_repo <- unlist(strsplit("l/p", "/"))
+    parse_repo <- unlist(strsplit(repo, "/"))
+    if (dir.exists(repo)){
+        message("Detected local repo, copy to final folder: ", local)
+        if (!dir.exists(file.path(local, basename(repo))))
+            file.copy(repo, local, recursive = TRUE)
+        return(file.path(local, basename(repo)))
+    }
     if (length(parse_repo) != 2){
         stop("repo is not well formatted, expecting something like user/repository")
     }
@@ -53,6 +59,8 @@ run_template <- function(repo, local = ".", output_file = NULL,
         return(0)
     }
 
+    output_file <- file.path(normalizePath(dirname(output_file)),
+                             basename(output_file))
     # render function with params
     if (!is.null(options[["output_dir"]])){
         stopifnot(dir.exists(options[["output_dir"]]))
@@ -63,13 +71,13 @@ run_template <- function(repo, local = ".", output_file = NULL,
                                                  basename(output_file)))
     }
     opts_normalized <- lapply(names(options), function(p){
-        message(p)
         if (is.character(options[[p]])){
             if (file.exists(options[[p]]))
                 return(normalizePath(options[[p]]))
         }else if (grepl("file", p)){
             return(normalizePath(options[[p]]))
         }
+        message(p, "->", options[[p]])
         options[[p]]
     })
     names(opts_normalized) <- names(options)
