@@ -7,6 +7,19 @@
 run_template(repo, local = ".", output_file = NULL, options = list(),
   params_file = NULL, ...)
 }
+\arguments{
+\item{repo}{character with the owner and repo names like: foo/bar}
+
+\item{local}{character with the folder where you want to clone the repo}
+
+\item{options}{list with options matching the params in the main.R file from the repository}
+
+\item{params_file}{optional YAML file with the options matching the params in the main.R file from the repository}
+
+\item{...}{any option for \code{\link[rmarkdown:render]{rmarkdown::render()}}}
+
+\item{outoup_file}{character with the final HTML}
+}
 \description{
 Main function to render templates from github or local folders
 }

@@ -2,4 +2,5 @@
 
 export(run_template)
 import(git2r)
+import(rmarkdown)
 import(yaml)

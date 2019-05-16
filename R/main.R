@@ -28,8 +28,15 @@ download_repo <- function(repo, local = ".", url = "https://github.com/"){
     return(local)
 }
 
-
+#' Main function to render templates from github or local folders
+#' @param repo character with the owner and repo names like: foo/bar
+#' @param local character with the folder where you want to clone the repo
+#' @param outoup_file character with the final HTML
+#' @param options list with options matching the params in the main.R file from the repository
+#' @param params_file optional YAML file with the options matching the params in the main.R file from the repository
+#' @param ... any option for [rmarkdown::render()]
 #' @import yaml
+#' @import rmarkdown
 #' @export
 run_template <- function(repo, local = ".", output_file = NULL,
                          options=list(), params_file=NULL,
@@ -71,7 +78,6 @@ run_template <- function(repo, local = ".", output_file = NULL,
     rmarkdown::render(main,
                       params = options,
                       output_file = output_file,
- #                     envir = baseenv(),
                       ...)
 
 }
