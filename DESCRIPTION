@@ -1,0 +1,14 @@
+Package: rmdCore
+Type: Package
+Title: Run templates analysis isolated in single reporsitories
+Version: 0.1.0
+Author: Lorena Pantano
+Maintainer: Lorena Pantano <lorena.pantano@gmail.com>
+Description: Following the same logic than nextflow, where
+    a pipeline can be in GitHub repositories, it will download
+    the template and run the workflow with custom parameters.
+License: What license is it under?
+Encoding: UTF-8
+Imports: devtools, yaml
+LazyData: true
+RoxygenNote: 6.1.1
