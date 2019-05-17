@@ -11,7 +11,7 @@ Description: Following the same logic than nextflow, where
 Encoding: UTF-8
 Depends:
     R (>= 3.5)
-Imports: devtools, yaml
+Imports: devtools, yaml, knitr, rmarkdown, git2r, tools
 LazyData: true
 BugReports: https://github.com/pilm-bioinformatics/rmdCore/issues
 RoxygenNote: 6.1.1

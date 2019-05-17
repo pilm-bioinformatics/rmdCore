@@ -1,0 +1,15 @@
+language: r
+sudo: false
+os:
+  - linux
+cache:
+  packages: true
+r:
+  - release
+  - devel
+r_github_packages:
+  - jimhester/covr
+before_install:
+  - tlmgr install index
+after_success:
+  - Rscript -e 'covr::codecov()'

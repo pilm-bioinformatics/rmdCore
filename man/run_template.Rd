@@ -12,13 +12,13 @@ run_template(repo, local = ".", output_file = NULL, options = list(),
 
 \item{local}{character with the folder where you want to clone the repo}
 
+\item{output_file}{character with the final HTML}
+
 \item{options}{list with options matching the params in the main.R file from the repository}
 
 \item{params_file}{optional YAML file with the options matching the params in the main.R file from the repository}
 
 \item{...}{any option for \code{\link[rmarkdown:render]{rmarkdown::render()}}}
-
-\item{outoup_file}{character with the final HTML}
 }
 \description{
 Main function to render templates from github or local folders

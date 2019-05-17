@@ -1,21 +1,51 @@
-test_that("clone-works", {
+test_that("clone-wrong-repo", {
     expect_error(download_repo("l/p/r/p"))
-    expect_message(download_repo(system.file(package = "rmdCore", "test-template")),
-                   "Detected local repo")
-    # unlink("templates-rmd-de", recursive = TRUE)
-    # run_template("pilm-bioinformatics/templates-rmd-de", ".")
-    # unlink("templates-rmd-de", recursive = TRUE)
 })
 
+test_that("clone-null-local", {
+    expect_error(download_repo("pilm-bioinformatics/templates-rmd-de", NULL))
+})
 
-test_that("render-works", {
-    parent <- system.file(package = "rmdCore", "test-template")
-    run_template(parent, ".", quiet = TRUE,
-                 output_file = "cars.html",
-                 options = list(in_file = file.path(parent, "data", "in.rds")))
-    expect_true(file.exists("cars.html"))
+test_that("clone-local-repo", {
+        expect_message(download_repo(system.file(package = "rmdCore", "test-template")),
+                   "Detected local repo")
     unlink("test-template", recursive = TRUE)
-    unlink("cars", recursive = TRUE)
-    unlink("cars.html", recursive = TRUE)
-    unlink("cars_files", recursive = TRUE)
+})
+
+test_that("clone-github", {
+    run_template("pilm-bioinformatics/templates-rmd-de", ".")
+    expect_true(file.exists("templates-rmd-de"))
+    unlink("templates-rmd-de", recursive = TRUE)
+})
+
+parent <- system.file(package = "rmdCore", "test-template")
+
+test_that("render-fast-test", {
+    # fast check
+    expect_message(check_template(parent), "All is good.")
+})
+
+test_that("render-test", {
+    # run test in ../checking
+    check_template(parent, test = TRUE, clean = FALSE)
+    working <- file.path(parent, "..")
+    expect_true(file.exists(file.path(working,
+                                      "checking",
+                                      "run",
+                                      "example",
+                                      "test.html")))
+    unlink(file.path(working, "checking"), recursive = TRUE)
+})
+
+test_that("render-test-working", {
+    # run test in working
+    dir.create("working")
+    check_template(parent, working = "working", test = TRUE, clean = FALSE)
+    expect_true(file.exists(file.path(
+                                      "working",
+                                      "run",
+                                      "example",
+                                      "test.html")))
+    unlink("working", recursive = TRUE)
+
 })
