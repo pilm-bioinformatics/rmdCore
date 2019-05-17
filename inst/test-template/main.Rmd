@@ -67,7 +67,6 @@ opts_chunk[["set"]](
 ```{r setup, message=FALSE}
 # Load bcbioRNASeq object
 # Directory paths
-output_dir <- params$output_dir
 dataDir <- file.path(params$output_dir, "data")
 dir.create(dataDir, showWarnings = FALSE, recursive = TRUE)
 ```
