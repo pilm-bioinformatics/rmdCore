@@ -16,9 +16,13 @@
 #' @import git2r
 download_repo <- function(repo, local = ".", url = "https://github.com/"){
     if (dir.exists(repo)){
+        repo <- normalizePath(repo)
         message("Detected local repo")
         if (is.null(local))
             return(normalizePath(repo))
+        local <- normalizePath(local)
+        if (!dir.exists(local))
+            dir.create(local, recursive = TRUE)
         message("Detected local repo, copy to final folder: ", local)
         if (!dir.exists(file.path(local, basename(repo))))
             file.copy(repo, local, recursive = TRUE)
@@ -72,6 +76,8 @@ run_template <- function(repo, local = ".", output_file = NULL,
     output_file <- file.path(normalizePath(dirname(output_file)),
                              basename(output_file))
     # render function with params
+    if (!dir.exists(dirname(output_file)))
+        dir.create(dirname(output_file), recursive = TRUE)
     if (!is.null(options[["output_dir"]])){
         stopifnot(dir.exists(options[["output_dir"]]))
         options[["output_dir"]] <- normalizePath(options[["output_dir"]])
