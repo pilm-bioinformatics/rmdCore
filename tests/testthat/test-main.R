@@ -20,6 +20,19 @@ test_that("clone-github", {
 
 parent <- system.file(package = "rmdCore", "test-template")
 
+test_that("render-error-output_dir", {
+    expect_error(run_template(parent, output_file = "test.html", output_dir = "test"))
+})
+
+test_that("render-output_file", {
+    run_template(parent, local = NULL, output_file = "working/test.html")
+    expect_true(file.exists(file.path("working",
+                                      "test.html")))
+    unlink("working", recursive = TRUE)
+
+})
+
+
 test_that("render-fast-test", {
     # fast check
     expect_message(check_template(parent), "All is good.")

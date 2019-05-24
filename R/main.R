@@ -59,7 +59,7 @@ run_template <- function(repo, local = ".", output_file = NULL,
                          options=list(), params_file=NULL,
                          ...){
     local <- download_repo(repo, local)
-    # TODO check repo
+
     check_template(local)
     # TODO check output_file to be html or pdf
     if (!is.null(params_file)){
@@ -73,24 +73,34 @@ run_template <- function(repo, local = ".", output_file = NULL,
     }
     stopifnot(tools::file_ext(output_file) %in% c("html", "pdf"))
 
-    output_file <- file.path(normalizePath(dirname(output_file)),
-                             basename(output_file))
-    # render function with params
     if (!dir.exists(dirname(output_file)))
         dir.create(dirname(output_file), recursive = TRUE)
+
+    output_file <- file.path(normalizePath(dirname(output_file)),
+                             basename(output_file))
+
+    if (!is.null(list(...)[["output_dir"]]))
+        stopifnot("output_dir is not used here. Use output_file with full path.")
+
     if (!is.null(options[["output_dir"]])){
-        stopifnot(dir.exists(options[["output_dir"]]))
+        if (!dir.exists(options[["output_dir"]]))
+            dir.create(options[["output_dir"]], recursive = TRUE)
+
         options[["output_dir"]] <- normalizePath(options[["output_dir"]])
     }else{
         options[["output_dir"]] <- file.path(dirname(output_file),
                                              tools::file_path_sans_ext(
                                                  basename(output_file)))
     }
+
     opts_normalized <- lapply(names(options), function(p){
         if (is.character(options[[p]])){
-            if (file.exists(options[[p]]))
+            if (file.exists(options[[p]])){
+                message(p, "->", normalizePath(options[[p]]))
                 return(normalizePath(options[[p]]))
+            }
         }else if (grepl("file", p)){
+            message(p, "->", normalizePath(options[[p]]))
             return(normalizePath(options[[p]]))
         }
         message(p, "->", options[[p]])
@@ -99,8 +109,9 @@ run_template <- function(repo, local = ".", output_file = NULL,
     names(opts_normalized) <- names(options)
 
     main = file.path(local, "main.Rmd")
+
     rmarkdown::render(main,
-                      params = options,
+                      params = opts_normalized,
                       output_file = output_file,
                       ...)
 
