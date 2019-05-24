@@ -74,7 +74,9 @@ run_template <- function(repo, local = ".", output_file = NULL,
     stopifnot(tools::file_ext(output_file) %in% c("html", "pdf"))
 
     if (!dir.exists(dirname(output_file)))
-        dir.create(dirname(output_file), recursive = TRUE)
+        dir.create(dirname(output_file),
+                   recursive = TRUE,
+                   showWarnings = FALSE)
 
     output_file <- file.path(normalizePath(dirname(output_file)),
                              basename(output_file))
@@ -166,12 +168,14 @@ check_template <- function(repo, local = NULL, working = NULL,
         }
 
         logs <- tryCatch({
-            dir.create(file.path(tmp, "run", "example"), recursive = TRUE)
+            dir.create(file.path(tmp, "run", "example"),
+                       recursive = TRUE,
+                       showWarnings = FALSE)
             tmp <- normalizePath(tmp)
             run_template(local, tmp,
-                         output_file = "test.html",
-                         options = list(output_dir = file.path(tmp, "run", "example")),
-                         output_dir = file.path(tmp, "run", "example"))
+                         output_file = file.path(tmp, "run", "example", "test.html"),
+                         options = list(output_dir = file.path(tmp, "run", "example"))
+                         )
 
             if (clean)
                 unlink(tmp, recursive = TRUE)

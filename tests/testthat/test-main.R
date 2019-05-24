@@ -22,6 +22,8 @@ parent <- system.file(package = "rmdCore", "test-template")
 
 test_that("render-error-output_dir", {
     expect_error(run_template(parent, output_file = "test.html", output_dir = "test"))
+    unlink("test-template", recursive = TRUE)
+    unlink("tests", recursive = TRUE)
 })
 
 test_that("render-output_file", {
